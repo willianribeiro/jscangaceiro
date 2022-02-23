@@ -1,3 +1,6 @@
+// Primeira implementação. Está aqui apenas para referência
+// do ponto de partida.
+
 const campos = [
     document.querySelector('#data'),
     document.querySelector('#quantidade'),
