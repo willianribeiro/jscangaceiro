@@ -8,12 +8,13 @@ class NegociacaoController {
 
     adicionar (event) {
         event.preventDefault()
-        const data = new Date(this._inputData.value.replace(/-/g, ','))
+
         const negociacao = new Negociacao(
-            data,
+            DateConverter.paraData(this._inputData.value),
             parseInt(this._inputQuantidade.value),
             parseFloat(this._inputValor.value)
         )
-        console.log(negociacao)
+
+        console.log(DateConverter.paraTexto(negociacao.data))
     }
 }
