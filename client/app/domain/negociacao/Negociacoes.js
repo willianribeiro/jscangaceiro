@@ -1,10 +1,15 @@
 class Negociacoes {
     constructor () {
         this._negociacoes = []
+        Object.freeze(this)
     }
 
     adiciona (negociacao) {
         this._negociacoes.push(negociacao)
+    }
+
+    esvazia () {
+        this._negociacoes.length = 0
     }
 
     lista () {
