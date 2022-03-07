@@ -1,18 +1,15 @@
 class Negociacoes {
-    constructor (armadilha) {
+    constructor () {
         this._negociacoes = []
-        this._armadilha = armadilha
         Object.freeze(this)
     }
 
     adiciona (negociacao) {
         this._negociacoes.push(negociacao)
-        this._armadilha(this)
     }
 
     esvazia () {
         this._negociacoes.length = 0
-        this._armadilha(this)
     }
 
     lista () {

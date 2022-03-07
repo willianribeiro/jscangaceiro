@@ -4,10 +4,35 @@ class NegociacaoController {
         this._inputData = $('#data')
         this._inputQuantidade = $('#quantidade')
         this._inputValor = $('#valor')
-        this._negociacoes = new Negociacoes(model => { this._negociacoesView.update(model) })
+        const self = this
+
+        // NEGOCIACOES
+        this._negociacoes = new Proxy(new Negociacoes(), {
+            get(target, prop, receiver) {
+                if (typeof(target[prop]) === 'function' && ['adiciona', 'esvazia'].includes(prop)) {
+                    return function () {
+                        console.log(`"${prop}" disparou a armadilha`);
+                        target[prop].apply(target, arguments)
+                        self._negociacoesView.update(target)
+                    }
+                }
+                return target[prop]
+            }
+        })
         this._negociacoesView = new NegociacoesView('#negociacoes')
         this._negociacoesView.update(this._negociacoes)
-        this._mensagem = new Mensagem('', model => { this._mensagemView.update(model) })
+
+        // MENSAGEM
+        this._mensagem = new Proxy(new Mensagem(), {
+            set (target, prop, value, receiver) {
+                if (prop === 'texto') {
+                    target.texto  = value
+                    self._mensagemView.update(target)
+                    return target.texto  === value
+                }
+                return Reflect.set(target, prop, value)
+            }
+        })
         this._mensagemView = new MensagemView('#mensagem')
         this._mensagemView.update(this._mensagem)
     }
