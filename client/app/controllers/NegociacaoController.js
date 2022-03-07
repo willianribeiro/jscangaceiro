@@ -6,17 +6,17 @@ class NegociacaoController {
         this._inputValor = $('#valor')
 
         // NEGOCIACOES
-        this._negociacoes = ProxyFactory.create(
+        this._negociacoes = new Bind(
             new Negociacoes(),
             new NegociacoesView('#negociacoes'),
-            ['adiciona', 'esvazia']
+            'adiciona', 'esvazia'
         )
 
         // MENSAGEM
-        this._mensagem = ProxyFactory.create(
+        this._mensagem = new Bind(
             new Mensagem(),
             new MensagemView('#mensagem'),
-            ['texto']
+            'texto'
         )
     }
 

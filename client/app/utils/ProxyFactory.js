@@ -1,12 +1,12 @@
 class ProxyFactory {
-    static create (objeto, view, props) {
+    static create (objeto, props, armadilha) {
         const proxy = new Proxy(objeto, {
             get(target, prop, receiver) {
                 if (ProxyFactory._ehFuncao(target[prop]) && props.includes(prop)) {
                     return function () {
                         console.log(`"${prop}" disparou a armadilha`);
                         target[prop].apply(target, arguments)
-                        view.update(target)
+                        armadilha(target)
                     }
                 }
                 return target[prop]
@@ -16,14 +16,14 @@ class ProxyFactory {
                 const updated = Reflect.set(target, prop, value)
 
                 if (props.includes(prop)) {
-                    view.update(target)
+                    armadilha(target)
                 }
 
                 return updated
             }
         })
 
-        view.update(proxy)
+        armadilha(proxy)
         return proxy
     }
 
