@@ -12,10 +12,9 @@
     <h1 class="text-center">Negociações</h1>
     
     <form class="form">
-        
         <div class="form-group">
             <label for="data">Data</label>
-            <input type="date" id="data" class="form-control" required autofocus/>        
+            <input type="text" id="data" class="form-control" required autofocus placeholder="dd/mm/aaaa"/>
         </div>    
         
         <div class="form-group">
@@ -46,6 +45,8 @@
     <div id="negociacoes"></div>
     
     <!-- HELPERS -->
+    <script src="app/utils/ApplicationException.js"></script>
+    <script src="app/utils/DataInvalidaException.js"></script>
     <script src="app/ui/converters/DateConverter.js"></script>
     <script src="app/utils/ProxyFactory.js"></script>
     <script src="app/utils/Bind.js"></script>

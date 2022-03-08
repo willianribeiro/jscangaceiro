@@ -4,8 +4,8 @@ class DateConverter {
     }
 
     static paraData(texto) {
-        if (!/^\d{4}-\d{2}-\d{2}$/.test(texto)) {
-            throw new Error('A data deve estar no formato aaaa-mm-dd')
+        if (!/^\d{2}\/\d{2}\/\d{4}$/.test(texto)) {
+            throw new DataInvalidaException()
         }
 
         return new Date(texto.replace(/-/g, ','))
