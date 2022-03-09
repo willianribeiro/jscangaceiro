@@ -18,6 +18,8 @@ class NegociacaoController {
             new MensagemView('#mensagem'),
             'texto'
         )
+
+        this._service = new NegociacaoService()
     }
 
     adiciona (event) {
@@ -41,6 +43,21 @@ class NegociacaoController {
     esvazia () {
         this._negociacoes.esvazia()
         this._mensagem.texto = 'Negociações apagadas com sucesso'
+    }
+
+    importaNegociacoes () {
+        this._service.obterNegociacoesDaSemana((error, negociacoes) => {
+            if (error) {
+                this._mensagem.texto = error
+                return
+            }
+
+            negociacoes.forEach(negociacao =>
+                this._negociacoes.adiciona(negociacao)
+            )
+
+            this._mensagem.texto = 'Negociações importadas com sucesso'
+        })
     }
 
     _criaNegociacao () {

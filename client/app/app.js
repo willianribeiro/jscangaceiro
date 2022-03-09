@@ -1,9 +1,11 @@
 const controller = new NegociacaoController()
+const $ = document.querySelector.bind(document)
 
-document
-    .querySelector('.form')
+$('.form')
     .addEventListener('submit', controller.adiciona.bind(controller))
 
-document
-    .querySelector('#botao-apaga')
+$('#botao-apaga')
     .addEventListener('click', controller.esvazia.bind(controller))
+
+$('#botao-importa')
+    .addEventListener('click', controller.importaNegociacoes.bind(controller))
