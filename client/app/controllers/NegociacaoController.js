@@ -46,8 +46,15 @@ class NegociacaoController {
     }
 
     importaNegociacoes () {
+        const negociacoes = []
+
         this._service.obterNegociacoesDaSemana()
-            .then(negociacoes => {
+            .then(negociacoesDaSemana => {
+                negociacoes.push(...negociacoesDaSemana)
+                return this._service.obtemNegociacoesDaSemanaAnterior()
+            })
+            .then(negociacoesDaSemanaAnterior => {
+                negociacoes.push(...negociacoesDaSemanaAnterior)
                 negociacoes.forEach(negociacao =>
                     this._negociacoes.adiciona(negociacao)
                 )
