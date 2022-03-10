@@ -46,18 +46,13 @@ class NegociacaoController {
     }
 
     importaNegociacoes () {
-        this._service.obterNegociacoesDaSemana((error, negociacoes) => {
-            if (error) {
-                this._mensagem.texto = error
-                return
-            }
-
-            negociacoes.forEach(negociacao =>
-                this._negociacoes.adiciona(negociacao)
-            )
-
-            this._mensagem.texto = 'Negociações importadas com sucesso'
-        })
+        this._service.obterNegociacoesDaSemana()
+            .then(negociacoes => {
+                negociacoes.forEach(negociacao =>
+                    this._negociacoes.adiciona(negociacao)
+                )
+                this._mensagem.texto = 'Negociações importadas com sucesso'
+            })
     }
 
     _criaNegociacao () {
