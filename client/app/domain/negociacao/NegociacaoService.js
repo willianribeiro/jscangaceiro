@@ -20,7 +20,7 @@ class NegociacaoService {
             )
     }
 
-    obtemNegociacoesDaSemanaAnterior() {
+    obtemNegociacoesDaSemanaPassada() {
         return this._http.get('/negociacoes/anterior')
             .then(
                 negociacoes => {
@@ -32,7 +32,24 @@ class NegociacaoService {
                         ))
                 },
                 error => {
-                    throw new Error('Não foi possível obter as negociações da semana anterior')
+                    throw new Error('Não foi possível obter as negociações da semana passada')
+                }
+            )
+    }
+
+    obtemNegociacoesDaSemanaRetrasada() {
+        return this._http.get('/negociacoes/retrasada')
+            .then(
+                negociacoes => {
+                    return negociacoes
+                        .map(negociacao => new Negociacao(
+                            new Date(negociacao.data),
+                            negociacao.quantidade,
+                            negociacao.valor
+                        ))
+                },
+                error => {
+                    throw new Error('Não foi possível obter as negociações da semana retrasada')
                 }
             )
     }
