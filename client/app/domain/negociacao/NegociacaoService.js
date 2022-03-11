@@ -53,4 +53,25 @@ class NegociacaoService {
                 }
             )
     }
+
+    obtemNegociacoesDoPeriodo () {
+        Promise.all([
+            this._service.obterNegociacoesDaSemana(),
+            this._service.obtemNegociacoesDaSemanaPassada(),
+            this._service.obtemNegociacoesDaSemanaRetrasada()
+        ])
+            .then(responses => {
+                return responses
+                    .reduce((todasNegociacoes, negociacoesPeriodo) =>  (
+                        todasNegociacoes.concat(negociacoesPeriodo)
+                    ), [])
+                    .sort((negociacao1, negociacao2) => {
+                        return negociacao2.data.getTime() - negociacao1.data.getTime()
+                    })
+            })
+            .catch(err => {
+                console.error(err);
+                throw new Error('Não foi possível obter as negociações do período')
+            })
+    }
 }

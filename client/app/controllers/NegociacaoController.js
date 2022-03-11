@@ -46,19 +46,9 @@ class NegociacaoController {
     }
 
     importaNegociacoes () {
-        Promise.all([
-            this._service.obterNegociacoesDaSemana(),
-            this._service.obtemNegociacoesDaSemanaPassada(),
-            this._service.obtemNegociacoesDaSemanaRetrasada()
-        ])
-            .then(response => {
-                const negociacoes = response
-                    .reduce((todasNegociacoes, negociacoesPeriodo) =>  (
-                        todasNegociacoes.concat(negociacoesPeriodo)
-                    ), [])
-                    .sort((negociacao1, negociacao2) => {
-                        return negociacao2.data.getTime() - negociacao1.data.getTime()
-                    })
+        this._service.obtemNegociacoesDoPeriodo()
+            .then(negociacoes => {
+                negociacoes
                     .filter(negociacaoParaAdicionar => {
                         const foiImportada = this._negociacoes.lista()
                             .some(negociacaoJaAdicionada => {
@@ -66,11 +56,9 @@ class NegociacaoController {
                             })
                         return !foiImportada
                     })
-
-                negociacoes.forEach(negociacao =>
-                    this._negociacoes.adiciona(negociacao)
-                )
-
+                    .forEach(negociacao =>
+                        this._negociacoes.adiciona(negociacao)
+                    )
                 this._mensagem.texto = 'Negociações importadas com sucesso'
             })
             .catch(error => this._mensagem.texto = error)
