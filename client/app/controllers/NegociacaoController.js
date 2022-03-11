@@ -52,9 +52,13 @@ class NegociacaoController {
             this._service.obtemNegociacoesDaSemanaRetrasada()
         ])
             .then(response => {
-                const negociacoes = response.reduce((todasNegociacoes, negociacoesPeriodo) =>  (
-                    todasNegociacoes.concat(negociacoesPeriodo)
-                ), [])
+                const negociacoes = response
+                    .reduce((todasNegociacoes, negociacoesPeriodo) =>  (
+                        todasNegociacoes.concat(negociacoesPeriodo)
+                    ), [])
+                    .sort((negociacao1, negociacao2) => {
+                        return negociacao2.data.getTime() - negociacao1.data.getTime()
+                    })
 
                 negociacoes.forEach(negociacao =>
                     this._negociacoes.adiciona(negociacao)
