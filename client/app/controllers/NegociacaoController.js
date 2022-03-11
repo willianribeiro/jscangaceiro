@@ -59,6 +59,13 @@ class NegociacaoController {
                     .sort((negociacao1, negociacao2) => {
                         return negociacao2.data.getTime() - negociacao1.data.getTime()
                     })
+                    .filter(negociacaoParaAdicionar => {
+                        const foiImportada = this._negociacoes.lista()
+                            .some(negociacaoJaAdicionada => {
+                                return negociacaoJaAdicionada.equals(negociacaoParaAdicionar)
+                            })
+                        return !foiImportada
+                    })
 
                 negociacoes.forEach(negociacao =>
                     this._negociacoes.adiciona(negociacao)
