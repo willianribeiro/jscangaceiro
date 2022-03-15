@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aprendendo IndexedDB</title>
+</head>
+<body>
+    <script src="app/domain/negociacao/Negociacao.js"></script>
+
+    <script>
+        // Para configurar o banco:
+        // 1. Faz uma requisição de abertura do banco de dados
+        // 2. Configura os eventos da requisição de abertura: onupgradeneeded, onsuccess e onerror
+        //  - onupgradeneeded: cria-se as stores
+        //  - onsuccess: guarda a connection pra acessar o banco mais tarde
+        //  - onerror: exibe mensagem para o usuário
+
+        // Para conectar com o banco:
+        // 1. Abrir uma transaction especificando as stores e o tipo de permissão de acesso
+        // 2. Obtem o objeto store
+        // 3. Faz a requisição de operação (add, openCursor...)
+
+        // Documentação:
+        // https://developer.mozilla.org/pt-BR/docs/Web/API/IndexedDB_API/Using_IndexedDB#pattern
+
+
+        const openRequest = indexedDB.open('jscangaceiro', 2)
+
+        let connection = null
+
+        openRequest.onupgradeneeded = event => {
+            console.log('Cria o banco de dados ou altera um já existente')
+
+            connection = event.target.result
+
+            if (connection.objectStoreNames.contains('negociacoes')) {
+                connection.deleteObjectStore('negociacoes')
+            }
+
+            connection.createObjectStore('negociacoes', { autoIncrement: true })
+        }
+
+        openRequest.onsuccess = event => {
+            connection = event.target.result
+            console.log('Conexão estabelecida com sucesso')
+        }
+
+        openRequest.onerror = event => {
+            console.log('Erro ao estabelecer a conexão com o banco de dados:')
+            console.error(event.target.error)
+        }
+
+        function adiciona () {
+            const request = connection
+                .transaction(['negociacoes'], 'readwrite')
+                .objectStore('negociacoes')
+                .add(new Negociacao(new Date(), 200, 1))
+
+            request.onsuccess = event => {
+                console.log('Negociação adicionada com sucesso')
+            }
+
+            request.onerror = event => {
+                console.log('Falha ao adicionar negociação:')
+                console.error(event.target.error)
+            }
+        }
+
+        function listaTodos () {
+            const negociacoes = []
+
+            const cursor = connection
+                .transaction(['negociacoes'], 'readonly')
+                .objectStore('negociacoes')
+                .openCursor()
+
+            cursor.onsuccess = event => {
+                const negociacaoCursor = event.target.result
+
+                if (negociacaoCursor) {
+                    negociacoes.push(new Negociacao(
+                        new Date(negociacaoCursor.value._data),
+                        negociacaoCursor.value._quantidade,
+                        negociacaoCursor.value._valor
+                    ))
+                    negociacaoCursor.continue()
+                } else {
+                    console.log(negociacoes)
+                }
+            }
+
+            cursor.onerror = event => {
+                console.log('Falha ao adicionar negociação:')
+                console.error('Error:' + e.target.error.name);
+            }
+        }
+    </script>
+</body>
+</html>
