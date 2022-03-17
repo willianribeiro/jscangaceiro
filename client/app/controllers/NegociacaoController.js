@@ -25,9 +25,25 @@ class NegociacaoController {
     adiciona (event) {
         try {
             event.preventDefault()
-            this._negociacoes.adiciona(this._criaNegociacao())
-            this._mensagem.texto = 'Negociação adicionada com sucesso'
-            this._limpaFormulario()
+            const negociacao = this._criaNegociacao()
+
+            ConnectionFactory.getConnection()
+                .then(connection => {
+                    const request = connection
+                        .transaction(['negociacoes'], 'readwrite')
+                        .objectStore('negociacoes')
+                        .add(negociacao)
+
+                    request.onsuccess = () => {
+                        this._negociacoes.adiciona(this._criaNegociacao())
+                        this._mensagem.texto = 'Negociação adicionada com sucesso'
+                        this._limpaFormulario()
+                    }
+
+                    request.onerror = () => {
+                        console.log('Erro acionar negociacao no banco de dados')
+                    }
+                })
         } catch (error) {
             console.error(error.message)
             console.error(error.stack)

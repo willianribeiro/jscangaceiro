@@ -8,7 +8,7 @@ const ConnectionFactory = (() => {
             throw new Error('Não é possível criar instâncias dessa classe. Use os métodos estáticos.')
         }
 
-        static getConnection (database='jscangaceiro3', version=1) {
+        static getConnection (database='jscangaceiro', version=2) {
             return new Promise((resolve, reject) => {
                 if (connection) return resolve(connection)
 
