@@ -22,8 +22,7 @@ class NegociacaoController {
         this._service = new NegociacaoService()
 
         // LISTA AS NEGOCIACOES CADASTRADAS NO BANCO
-        ConnectionFactory.getConnection()
-            .then(connection => new NegociacaoDao(connection))
+        DaoFactory.getNegociacaoDao()
             .then(dao => dao.lista())
             .then(negociacoes => console.log(negociacoes))
     }
@@ -33,8 +32,7 @@ class NegociacaoController {
             event.preventDefault()
             const negociacao = this._criaNegociacao()
 
-            ConnectionFactory.getConnection()
-                .then(connection => new NegociacaoDao(connection))
+            DaoFactory.getNegociacaoDao()
                 .then(dao => dao.adiciona(negociacao))
                 .then(() => {
                     this._negociacoes.adiciona(negociacao)
