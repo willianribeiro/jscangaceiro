@@ -20,11 +20,21 @@ class NegociacaoController {
         )
 
         this._service = new NegociacaoService()
+        this._init()
+    }
 
-        // LISTA AS NEGOCIACOES CADASTRADAS NO BANCO
+    _init() {
         DaoFactory.getNegociacaoDao()
             .then(dao => dao.lista())
-            .then(negociacoes => console.log(negociacoes))
+            .then(negociacoes => {
+                negociacoes.forEach(negociacao => {
+                    this._negociacoes.adiciona(new Negociacao(
+                        new Date(negociacao._data),
+                        negociacao._quantidade,
+                        negociacao._valor
+                    ))
+                })
+            })
     }
 
     adiciona (event) {
