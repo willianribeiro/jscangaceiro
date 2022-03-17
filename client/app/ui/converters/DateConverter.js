@@ -8,6 +8,6 @@ class DateConverter {
             throw new DataInvalidaException()
         }
 
-        return new Date(texto.replace(/-/g, ','))
+        return new Date(texto.split('/').reverse())
     }
 }
