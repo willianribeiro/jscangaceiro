@@ -35,6 +35,7 @@ class NegociacaoController {
                     ))
                 })
             })
+            .catch(error => this._mensagem.texto = error)
     }
 
     adiciona (event) {
@@ -49,6 +50,8 @@ class NegociacaoController {
                     this._mensagem.texto = 'Negociação adicionada com sucesso'
                     this._limpaFormulario()
                 })
+                .catch(error => this._mensagem.texto = error)
+
         } catch (error) {
             console.error(error.message)
             console.error(error.stack)
@@ -62,8 +65,13 @@ class NegociacaoController {
     }
 
     esvazia () {
-        this._negociacoes.esvazia()
-        this._mensagem.texto = 'Negociações apagadas com sucesso'
+        DaoFactory.getNegociacaoDao()
+            .then(dao => dao.apagaTodas())
+            .then(() => {
+                this._negociacoes.esvazia()
+                this._mensagem.texto = 'Negociações apagadas com sucesso'
+            })
+            .catch(error => this._mensagem.texto = error)
     }
 
     importaNegociacoes () {

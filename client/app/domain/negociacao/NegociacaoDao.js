@@ -44,4 +44,19 @@ class NegociacaoDao {
             }
         })
     }
+
+    apagaTodas () {
+        return new Promise((resolve, reject) => {
+            const request = this._connection
+                .transaction(['negociacoes'], 'readwrite')
+                .objectStore('negociacoes')
+                .clear()
+
+            request.onsuccess = () => resolve()
+            request.onerror = event => {
+                console.error(event.target.error)
+                reject('Não foi possível apagar as negociações do banco')
+            }
+        })
+    }
 }
