@@ -1,4 +1,4 @@
-import { DataInvalidaException } from '../../utils/DataInvalidaException.js'
+import { DataInvalidaException } from './DataInvalidaException.js'
 
 export class DateConverter {
     static paraTexto(data) {

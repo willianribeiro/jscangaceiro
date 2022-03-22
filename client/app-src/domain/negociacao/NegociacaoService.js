@@ -1,4 +1,4 @@
-import { HttpService } from '../../util/HttpService.js'
+import { HttpService } from '../../utils/HttpService.js'
 import { Negociacao } from './Negociacao.js'
 
 export class NegociacaoService {
