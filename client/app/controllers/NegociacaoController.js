@@ -27,13 +27,9 @@ class NegociacaoController {
         getNegociacaoDao()
             .then(dao => dao.lista())
             .then(negociacoes => {
-                negociacoes.forEach(negociacao => {
-                    this._negociacoes.adiciona(new Negociacao(
-                        new Date(negociacao._data),
-                        negociacao._quantidade,
-                        negociacao._valor
-                    ))
-                })
+                negociacoes.forEach(
+                    negociacao => this._negociacoes.adiciona(negociacao)
+                )
             })
             .catch(error => this._mensagem.texto = error)
     }

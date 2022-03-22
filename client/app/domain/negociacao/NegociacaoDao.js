@@ -31,7 +31,14 @@ class NegociacaoDao {
                 const negociacaoCursor = event.target.result
 
                 if (negociacaoCursor) {
-                    negociacoes.push(negociacaoCursor.value)
+                    const negociacao = negociacaoCursor.value
+
+                    negociacoes.push(new Negociacao(
+                        new Date(negociacao._data),
+                        negociacao._quantidade,
+                        negociacao._valor
+                    ))
+
                     negociacaoCursor.continue()
                 } else {
                     resolve(negociacoes)
