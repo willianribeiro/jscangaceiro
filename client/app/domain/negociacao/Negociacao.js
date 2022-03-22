@@ -1,4 +1,4 @@
-class Negociacao {
+export class Negociacao {
     constructor (_data, _quantidade, _valor) {
         // Negociacao precisa ser imutável
         this._data = new Date(_data.getTime())

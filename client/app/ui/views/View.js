@@ -1,4 +1,4 @@
-class View {
+export class View {
     constructor (selector) {
         this._elemento = document.querySelector(selector)
     }

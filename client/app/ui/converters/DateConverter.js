@@ -1,4 +1,6 @@
-class DateConverter {
+import { DataInvalidaException } from '../../utils/DataInvalidaException.js'
+
+export class DateConverter {
     static paraTexto(data) {
         return `${data.getDate()}/${data.getMonth() + 1}/${data.getFullYear()}`
     }
