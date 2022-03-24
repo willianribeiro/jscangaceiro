@@ -1,5 +1,6 @@
 import { Negociacoes, NegociacaoService, Negociacao } from '../domain/index.js'
-import { NegociacoesView, MensagemView, Mensagem, DataInvalidaException, DateConverter } from '../ui/index.js'
+import { NegociacoesView, MensagemView, Mensagem, DateConverter } from '../ui/index.js'
+import { getExceptionMessage } from '../utils/index.js'
 import { getNegociacaoDao, Bind } from '../utils/index.js'
 
 export class NegociacaoController {
@@ -33,7 +34,7 @@ export class NegociacaoController {
             const negociacoes = await dao.lista()
             negociacoes.forEach(negociacao => this._negociacoes.adiciona(negociacao))
         } catch (error) {
-            this._mensagem.texto = error.message
+            this._mensagem.texto = getExceptionMessage(error)
         }
     }
 
@@ -47,9 +48,7 @@ export class NegociacaoController {
             this._mensagem.texto = 'Negociação adicionada com sucesso'
             this._limpaFormulario()
         } catch (error) {
-            console.error(error.stack)
-            console.error(error.message)
-            this._mensagem.texto = error.message
+            this._mensagem.texto = getExceptionMessage(error)
         }
     }
 
@@ -60,7 +59,7 @@ export class NegociacaoController {
             this._negociacoes.esvazia()
             this._mensagem.texto = 'Negociações apagadas com sucesso'
         } catch(error) {
-            this._mensagem.texto = error.message
+            this._mensagem.texto = getExceptionMessage(error)
         }
     }
 
@@ -80,7 +79,7 @@ export class NegociacaoController {
                 )
             this._mensagem.texto = 'Negociações importadas com sucesso'
         } catch (error) {
-            this._mensagem.texto = error.message
+            this._mensagem.texto = getExceptionMessage(error)
         }
     }
 
