@@ -6,78 +6,66 @@ export class NegociacaoService {
         this._http = new HttpService()
     }
 
-    obterNegociacoesDaSemana() {
-        return this._http.get('/negociacoes/semana')
-            .then(
-                negociacoes => {
-                    return negociacoes
-                        .map(negociacao => new Negociacao(
-                            new Date(negociacao.data),
-                            negociacao.quantidade,
-                            negociacao.valor
-                        ))
-                },
-                error => {
-                    console.error(error)
-                    throw new Error('Não foi possível obter as negociações da semana')
-                }
-            )
+    async obterNegociacoesDaSemana () {
+        try {
+            const negociacoes = await this._http.get('/negociacoes/semana')
+            return negociacoes.map(negociacao => new Negociacao(
+                new Date(negociacao.data),
+                negociacao.quantidade,
+                negociacao.valor
+            ))
+        } catch (error) {
+            console.error(error)
+            throw new Error('Não foi possível obter as negociações da semana')
+        }
     }
 
-    obtemNegociacoesDaSemanaPassada() {
-        return this._http.get('/negociacoes/anterior')
-            .then(
-                negociacoes => {
-                    return negociacoes
-                        .map(negociacao => new Negociacao(
-                            new Date(negociacao.data),
-                            negociacao.quantidade,
-                            negociacao.valor
-                        ))
-                },
-                error => {
-                    console.error(error)
-                    throw new Error('Não foi possível obter as negociações da semana passada')
-                }
-            )
+    async obtemNegociacoesDaSemanaPassada () {
+        try {
+            const negociacoes = await this._http.get('/negociacoes/anterior')
+            return negociacoes.map(negociacao => new Negociacao(
+                new Date(negociacao.data),
+                negociacao.quantidade,
+                negociacao.valor
+            ))
+        } catch (error) {
+            console.error(error)
+            throw new Error('Não foi possível obter as negociações da semana passada')
+        }
     }
 
-    obtemNegociacoesDaSemanaRetrasada() {
-        return this._http.get('/negociacoes/retrasada')
-            .then(
-                negociacoes => {
-                    return negociacoes
-                        .map(negociacao => new Negociacao(
-                            new Date(negociacao.data),
-                            negociacao.quantidade,
-                            negociacao.valor
-                        ))
-                },
-                error => {
-                    console.error(error)
-                    throw new Error('Não foi possível obter as negociações da semana retrasada')
-                }
-            )
+    async obtemNegociacoesDaSemanaRetrasada () {
+        try {
+            const negociacoes = await this._http.get('/negociacoes/retrasada')
+            return negociacoes.map(negociacao => new Negociacao(
+                new Date(negociacao.data),
+                negociacao.quantidade,
+                negociacao.valor
+            ))
+        } catch (error) {
+            console.error(error)
+            throw new Error('Não foi possível obter as negociações da semana retrasada')
+        }
     }
 
-    obtemNegociacoesDoPeriodo () {
-        return Promise.all([
-            this.obterNegociacoesDaSemana(),
-            this.obtemNegociacoesDaSemanaPassada(),
-            this.obtemNegociacoesDaSemanaRetrasada()
-        ])
-            .then(responses => {
-                return responses
-                    .reduce((todasNegociacoes, negociacoesPeriodo) =>  (
-                        todasNegociacoes.concat(negociacoesPeriodo)
-                    ), [])
-                    .sort((negociacao1, negociacao2) => {
-                        return negociacao2.data.getTime() - negociacao1.data.getTime()
-                    })
-            })
-            .catch(err => {
-                console.error(err);
-                throw new Error('Não foi possível obter as negociações do período')
-            })
+    async obtemNegociacoesDoPeriodo () {
+        try {
+            const responses = await Promise.all([
+                this.obterNegociacoesDaSemana(),
+                this.obtemNegociacoesDaSemanaPassada(),
+                this.obtemNegociacoesDaSemanaRetrasada()
+            ])
+
+            return responses
+                .reduce((todasNegociacoes, negociacoesPeriodo) =>  (
+                    todasNegociacoes.concat(negociacoesPeriodo)
+                ), [])
+                .sort((negociacao1, negociacao2) => {
+                    return negociacao2.data.getTime() - negociacao1.data.getTime()
+                })
+        } catch (error) {
+            console.error(error);
+            throw new Error('Não foi possível obter as negociações do período')
+        }
     }
 }
