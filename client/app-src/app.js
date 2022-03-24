@@ -1,4 +1,5 @@
 import { NegociacaoController } from './controllers/NegociacaoController.js'
+import { debounce  } from './utils/Debounce.js'
 
 const controller = new NegociacaoController()
 const $ = document.querySelector.bind(document)
@@ -10,4 +11,4 @@ $('#botao-apaga')
     .addEventListener('click', controller.esvazia.bind(controller))
 
 $('#botao-importa')
-    .addEventListener('click', controller.importaNegociacoes.bind(controller))
+    .addEventListener('click', debounce(controller.importaNegociacoes.bind(controller), 1000))
